@@ -1,0 +1,31 @@
+From the below query, please  consider the matched condition and give me the result in tabular format by following the below instructions
+Instructions:
+first tab of table should contain the columns from which data is coming
+second tab of table should contain the columns to which data is loading
+third tab should contain the details of view/table from which data is coming
+Dont hallucinate and dont include alias names while giving column names
+
+MERGE INTO TEST_SCHEMA.TEST_GENAI_TARGET TGT 
+USING TEST_SCHEMA.VW_TEST_GENAI SRC
+ON TGT.EMP_ID = SRC.EMP_ID
+WHEN MATCHED THEN UPDATE SET 
+TGT.EMP_FIRST_NAME=SRC.EMP_FIRST_NAME,
+TGT.EMP_MIDDLE_NAME=SRC.EMP_MIDDLE_NAME,
+TGT.EMP_LAST_NAME=SRC.EMP_LAST_NAME,
+TGT.DEPARTMENT_NAME=SRC.DEPT_NAME
+WHEN NOT MATCHED THEN INSERT
+(
+    EMP_ID,
+    EMP_FIRST_NAME,
+    EMP_MIDDLE_NAME,
+    EMP_LAST_NAME,
+    DEPARTMENT_NAME
+)
+VALUES
+(
+    SRC.EMP_ID,
+    SRC.EMP_FIRST_NAME,
+    SRC.EMP_MIDDLE_NAME,
+    SRC.EMP_LAST_NAME,
+    SRC.DEPT_NAME
+);
